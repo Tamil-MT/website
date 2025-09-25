@@ -1,0 +1,56 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="stylesheet" href="site-1.css">
+    <link rel="icon" href="7030346_login_ui basic_app_sign in_user interface_icon.png">
+</head>
+<body>
+    <center>
+        <h1>Registration / Login</h1>
+        <form onsubmit="return validateLogin()">
+            <div class="user">
+            <h2>Username</h2>
+            <!-- <span class="icon"><ion-icon name="person-circle"></ion-icon></span> -->
+            <input type="text" id="username" required placeholder="Enter your Username">
+            </div>
+            <br><br>
+            <div class="pass">
+            <h2>Password</h2>
+            <!-- <span class="icon"><ion-icon name="lock-closed"></ion-icon></span> -->
+            <input type="password" id="password" required placeholder="Enter your Password">
+            </div>
+            <br><br>
+            <button type="submit">Login</button>
+            <p id="error-msg" style="color: rgb(255, 255, 255);"></p>
+        </form>
+    </center>
+
+    <script>
+       
+        function validateLogin() {
+            // Replace with your correct credentials
+            const correctUsername = "Mo";
+            const correctPassword = "24-09-2003";
+
+            // Get values from form
+            const enteredUsername = document.getElementById("username").value;
+            const enteredPassword = document.getElementById("password").value;
+
+            if (enteredUsername === correctUsername && enteredPassword === correctPassword) {
+                // Redirect to WEB-2.html if login is correct
+                window.location.href = "WEB-2.html";
+                return false; // Prevent actual form submission
+            } else {
+                // Show error message
+                document.getElementById("error-msg").textContent = "Invalid username or password!";
+                return false; // Prevent form submission
+            }
+        }
+    </script>
+     <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+        <script src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js">   </script>
+
+</body>
+</html>
