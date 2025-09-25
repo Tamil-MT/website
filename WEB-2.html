@@ -1,0 +1,219 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MT-16</title>
+    <link rel="icon" href="8664891_face_kiss_wink_heart_icon.png">
+</head>
+<body>
+    <style>
+    body{
+      margin:0;
+      font-family:"Poppins",sans-serif;
+      background:linear-gradient(135deg,#ff758c,#ff7eb3,#fbb1bd);
+      background-size:400% 400%;
+      animation:bgMove 15s ease infinite;
+      color:#fff;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      min-height:100vh;
+    }
+    @keyframes bgMove{
+      0%{background-position:0% 50%}
+      50%{background-position:100% 50%}
+      100%{background-position:0% 50%}
+    }
+
+    .card{
+      background:rgba(255,255,255,0.12);
+      border-radius:28px;
+      padding:25px;
+      box-shadow:0 12px 40px rgba(255,0,120,0.4);
+      display:flex;
+      flex-direction:row;
+      gap:25px;
+      max-width:1150px;
+      width:90%;
+      backdrop-filter:blur(16px);
+      border:2px solid rgba(255,255,255,0.25);
+      animation:fadeIn 1.2s ease;
+    }
+    @keyframes fadeIn{
+      from{opacity:0; transform:translateY(20px);}
+      to{opacity:1; transform:translateY(0);}
+    }
+
+    .video-area{
+      flex:2;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+    }
+
+    video{
+      width:35%;
+      border-radius:20px;
+      box-shadow:0 6px 30px rgba(0,0,0,0.5);
+      cursor:pointer;
+      border:3px solid #fff;
+      animation:glowPulse 3s infinite;
+    }
+    @keyframes glowPulse{
+      0%,100%{box-shadow:0 0 20px rgba(255,100,150,0.7);}
+      50%{box-shadow:0 0 40px rgba(255,0,100,0.9);}
+    }
+
+    .controls{
+      margin-top:15px;
+      display:flex;
+      gap:15px;
+    }
+
+    button{
+      padding:10px 24px;
+      border:none;
+      border-radius:50px;
+      font-weight:600;
+      cursor:pointer;
+      font-size:15px;
+      transition:0.3s;
+      position:relative;
+      overflow:hidden;
+    }
+    button::after{
+      content:"";
+      position:absolute;
+      top:0;left:-100%;
+      width:100%;height:100%;
+      background:rgba(255,255,255,0.3);
+      transition:.4s;
+    }
+    button:hover::after{left:100%;}
+
+    .btn-primary{
+      background:#ff3e6c;
+      color:#fff;
+      box-shadow:0 4px 15px rgba(255,0,100,0.5);
+    }
+    .btn-secondary{
+      background:#fff;
+      color:#ff3e6c;
+    }
+
+    .quote-area{
+      flex:1;
+      background:rgba(255,255,255,0.25);
+      border-radius:20px;
+      padding:20px;
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+      transform:scale(0.8);
+      opacity:0;
+      transition:all .6s ease;
+      border:2px solid rgba(255,255,255,0.3);
+      box-shadow:inset 0 0 20px rgba(255,255,255,0.3);
+    }
+
+    .quote-area.show{
+      transform:scale(1);
+      opacity:1;
+    }
+
+    .quote-text{
+      font-size:20px;
+      line-height:1.6;
+      margin-bottom:12px;
+      font-style:italic;
+      position:relative;
+    }
+    .quote-text::before{
+      content:"💞 ";
+    }
+    .quote-author{
+      font-size:14px;
+      opacity:.9;
+      text-align:right;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="card">
+    <!-- video -->
+    <div class="video-area">
+      <video id="myVideo" loop>
+        <source id="videoSource" src="" type="video/mp4">
+        உங்கள் browser video ஆதரிக்கவில்லை.
+      </video>
+      <div class="controls">
+        <button id="prevBtn" class="btn-secondary">⏮ Prev</button>
+        <button id="nextBtn" class="btn-primary">Next ⏭</button>
+      </div>
+    </div>
+
+    <!-- quotes -->
+    <div id="quoteBox" class="quote-area">
+      <div class="quote-text" id="quoteText"></div>
+      <div class="quote-author" id="quoteAuthor"></div>
+    </div>
+  </div>
+
+  <script>
+    const video=document.getElementById("myVideo");
+    const videoSrc=document.getElementById("videoSource");
+    const quoteBox=document.getElementById("quoteBox");
+    const quoteText=document.getElementById("quoteText");
+    const quoteAuthor=document.getElementById("quoteAuthor");
+
+    const prevBtn=document.getElementById("prevBtn");
+    const nextBtn=document.getElementById("nextBtn");
+
+    const videos=[
+      "a9afb7e2a7b9a738fca41bf12c11f4b7.mp4",
+      "af6301ab0aa83e9c76cae78fa8ec9e0b.mp4",
+      "AQMtpU6aKrRCDyyxQ-Iu2GVWBUfV7Z_aPhu0_rGSOG5q1p3OfxQxHaVvjFdVmTM4vMp45BNsh-2ADxxxaKxXAL__FtOIxxr5IGLPs8U.mp4",
+      "AQN5Yvm5LwcatBFJK3_EJ-uz3nd7Z6jpz6vAIzr1RLXn5V8D9S_6GcPy-qLhBntfy895WhpVPyIKnTfUMLkx4OLei2qohPz3FF1613I.mp4",
+      "ffa51f8d083bcada368986243ebb6cf8.mp4",
+      "AQNJ0hZ9tmxMBgK71zht1l4Lpie3mPnsfVKe1TxMINj_gd6uMPz8TS-suvoy86kfV_J3s9R57c8Dw2LIinvod1J6JyeY3jOi6ps0hqo.mp4",
+      "AQPt7mUGOgbxLKKkFo3CCctdNIEzT6-TMaY7rEA8PcK6WKd9UcBgPWwHTh7jUHInqntQrjyL-u2vQXkqaQtiZnGQfTqAPqeU6sAlm2A.mp4"
+      
+    ];
+
+    const quotes=[
+      {t:"உன்னை பார்த்த நாளிலிருந்து என் உலகமே மாறிவிட்டது.",a:"— காதல்"},
+      {t:"உன் சிரிப்பு என் இதயத்தின் இசை.",a:"— மனம்"},
+      {t:"உன்னை நினைக்காமல் ஒரு நொடியும் செல்லவில்லை.",a:"— நினைவுகள்"},
+      {t:"என் கனவுகள் எல்லாம் நீ தான்.",a:"— காதல் கனவு"},
+      {t:"உன் பாசம் என் உயிரின் மூச்சு.",a:"— உண்மை காதல்"},
+      {t:"என் இதயத்தில் நீ தான் முதல் கவிதை.",a:"— பாசம்"},
+      {t:"காதல் வார்த்தை அழகானது அந்த அழகுக்கு நிகரானது நீ தான்.",a:"— காதல் நினைவுகள்"}
+    ];
+
+    let i=0;
+
+    function loadVideo(index){
+      i=(index+videos.length)%videos.length;
+      videoSrc.src=videos[i];
+      video.load();
+      quoteText.textContent=quotes[i].t;
+      quoteAuthor.textContent=quotes[i].a;
+      quoteBox.classList.remove("show");
+    }
+
+    // Initial
+    loadVideo(0);
+
+    // click video to show quote
+    video.addEventListener("click",()=>{
+      quoteBox.classList.add("show");
+      video.play();
+    });
+
+    // controls
+    nextBtn.addEventListener("click",()=>loadVideo(i+1));
+    prevBtn.addEventListener("click",()=>loadVideo(i-1));
+  </script>
+</body>
+</html>
